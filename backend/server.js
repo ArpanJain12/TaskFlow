@@ -1,35 +1,3 @@
-// import cors from 'cors';
-// import 'dotenv/config';
-// import express from 'express';
-// import { connectDB } from './config/db.js';
-
-// import userRouter from './routes/userRoute.js';
-// import taskRouter from './routes/taskRoute.js';
-
-// const app = express();
-// const port = process.env.PORT || 4000;
-
-// // Middleware
-// app.use(cors());
-// app.use(express.json());
-// app.use(express.urlencoded({ extended: true }));
-
-// // Database Connection
-// connectDB();
-
-// // Routes
-// app.use("/api/user", userRouter);
-
-// app.use('/api/tasks', taskRouter);
-
-// app.get('/', (req, res) => {
-//     res.send('API Working');
-// });
-
-// app.listen(port, () => {
-//     console.log(`Server Started on ${port}`);
-// });
-
 import cors from 'cors';
 import 'dotenv/config';
 import express from 'express';
@@ -38,8 +6,17 @@ import taskRouter from './routes/taskRoute.js';
 
 const app = express();
 
+//  FIXED CORS
+app.use(cors({
+  origin: process.env.FRONTEND_URL,
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  credentials: true
+}));
+
+//  Handle preflight requests
+app.options("*", cors());
+
 // Middleware
-app.use(cors({ origin: process.env.FRONTEND_URL || '*' }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -52,4 +29,4 @@ app.get('/', (req, res) => {
   res.send('API Working');
 });
 
-export default app
+export default app;
